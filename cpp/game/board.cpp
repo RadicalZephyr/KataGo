@@ -2755,6 +2755,11 @@ Board Board::parseBoard(int xSize, int ySize, const string& s, char lineDelimite
       Loc loc = Location::getLoc(x,y,board.x_size);
       if(c == '.' || c == ' ' || c == '*' || c == ',' || c == '`')
         continue;
+      else if(c == '#') {
+        bool suc = board.setWallFailIfOutOfBounds(loc);
+        if(!suc)
+          throw StringError(string("Board::parseBoard - could not place wall at ") + Location::toString(loc,board));
+      }
       else if(c == 'o' || c == 'O') {
         bool suc = board.setStoneFailIfNoLibs(loc,P_WHITE);
         if(!suc)
