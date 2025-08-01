@@ -38,6 +38,8 @@ namespace Tests {
 
   //testnninputs.cpp
   void runNNInputsV3V4Tests();
+  void runWallTests();
+  void runWallSearchTests();
 
   //testsymmetries.cpp
   void runBasicSymmetryTests();

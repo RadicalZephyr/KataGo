@@ -5,6 +5,7 @@
 #include "../neuralnet/nninputs.h"
 #include "../neuralnet/modelversion.h"
 #include "../dataio/sgf.h"
+#include "../core/config_parser.h"
 
 using namespace std;
 using namespace TestCommon;
@@ -1494,5 +1495,25 @@ ooxooxo
       }
     }
   }
+}
+
+void Tests::runWallTests() {
+  cout << "Running wall tests" << endl;
+
+  Board board = Board(5,5);
+  Player nextPla = P_BLACK;
+  Rules rules = Rules::getTrompTaylorish();
+  BoardHistory hist(board,nextPla,rules,0);
+  Loc wallLoc = Location::getLoc(2,2,board.x_size);
+  testAssert(board.setWallFailIfOutOfBounds(wallLoc));
+
+  float rowBin[NNInputs::NUM_FEATURES_SPATIAL_V7 * 5 * 5];
+  float rowGlobal[NNInputs::NUM_FEATURES_GLOBAL_V7];
+  MiscNNInputParams nnInputParams;
+  NNInputs::fillRowV7(board,hist,nextPla,nnInputParams,5,5,false,rowBin,rowGlobal);
+  int pos = NNPos::xyToPos(2,2,5);
+  testAssert(rowBin[pos] == 0.0f);
+
+  testAssert(!hist.isLegal(board, wallLoc, nextPla));
 }
 
