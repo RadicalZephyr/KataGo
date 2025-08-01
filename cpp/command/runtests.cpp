@@ -77,6 +77,7 @@ int MainCmds::runoutputtests(const vector<string>& args) {
 
   Tests::runNNInputsV3V4Tests();
   Tests::runWallTests();
+  Tests::runWallSearchTests();
   Tests::runNNLessSearchTests();
   Tests::runTrainingWriteTests();
   Tests::runTimeControlsTests();
