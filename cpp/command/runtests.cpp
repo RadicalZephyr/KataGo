@@ -76,6 +76,7 @@ int MainCmds::runoutputtests(const vector<string>& args) {
   ScoreValue::initTables();
 
   Tests::runNNInputsV3V4Tests();
+  Tests::runWallTests();
   Tests::runNNLessSearchTests();
   Tests::runTrainingWriteTests();
   Tests::runTimeControlsTests();

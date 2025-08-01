@@ -856,8 +856,10 @@ static void iterLadders(const Board& board, int nnXLen, std::function<void(Loc,i
 
   for(int y = 0; y<ySize; y++) {
     for(int x = 0; x<xSize; x++) {
-      int pos = NNPos::xyToPos(x,y,nnXLen);
       Loc loc = Location::getLoc(x,y,xSize);
+      if(board.colors[loc] == C_WALL)
+        continue;
+      int pos = NNPos::xyToPos(x,y,nnXLen);
       Color stone = board.colors[loc];
       if(stone == P_BLACK || stone == P_WHITE) {
         int libs = board.getNumLiberties(loc);
@@ -1002,8 +1004,10 @@ void NNInputs::fillRowV3(
 
   for(int y = 0; y<ySize; y++) {
     for(int x = 0; x<xSize; x++) {
-      int pos = NNPos::xyToPos(x,y,nnXLen);
       Loc loc = Location::getLoc(x,y,xSize);
+      if(board.colors[loc] == C_WALL)
+        continue;
+      int pos = NNPos::xyToPos(x,y,nnXLen);
 
       //Feature 0 - on board
       setRowBin(rowBin,pos,0, 1.0f, posStride, featureStride);
@@ -1035,6 +1039,8 @@ void NNInputs::fillRowV3(
     for(int y = 0; y<ySize; y++) {
       for(int x = 0; x<xSize; x++) {
         Loc loc = Location::getLoc(x,y,xSize);
+        if(board.colors[loc] == C_WALL)
+          continue;
         if(hist.superKoBanned[loc] && loc != board.ko_loc) {
           int pos = NNPos::locToPos(loc,xSize,nnXLen,nnYLen);
           setRowBin(rowBin,pos,6, 1.0f, posStride, featureStride);
@@ -1047,6 +1053,8 @@ void NNInputs::fillRowV3(
     for(int y = 0; y<ySize; y++) {
       for(int x = 0; x<xSize; x++) {
         Loc loc = Location::getLoc(x,y,xSize);
+        if(board.colors[loc] == C_WALL)
+          continue;
         int pos = NNPos::locToPos(loc,xSize,nnXLen,nnYLen);
         if(hist.superKoBanned[loc])
           setRowBin(rowBin,pos,6, 1.0f, posStride, featureStride);
@@ -1181,6 +1189,8 @@ void NNInputs::fillRowV3(
   for(int y = 0; y<ySize; y++) {
     for(int x = 0; x<xSize; x++) {
       Loc loc = Location::getLoc(x,y,xSize);
+      if(board.colors[loc] == C_WALL)
+        continue;
       int pos = NNPos::locToPos(loc,xSize,nnXLen,nnYLen);
       if(area[loc] == pla)
         setRowBin(rowBin,pos,18, 1.0f, posStride, featureStride);
@@ -1194,6 +1204,8 @@ void NNInputs::fillRowV3(
     for(int y = 0; y<ySize; y++) {
       for(int x = 0; x<xSize; x++) {
         Loc loc = Location::getLoc(x,y,xSize);
+        if(board.colors[loc] == C_WALL)
+          continue;
         int pos = NNPos::locToPos(loc,xSize,nnXLen,nnYLen);
         if(hist.secondEncoreStartColors[loc] == pla)
           setRowBin(rowBin,pos,20, 1.0f, posStride, featureStride);
@@ -1352,8 +1364,10 @@ void NNInputs::fillRowV4(
 
   for(int y = 0; y<ySize; y++) {
     for(int x = 0; x<xSize; x++) {
-      int pos = NNPos::xyToPos(x,y,nnXLen);
       Loc loc = Location::getLoc(x,y,xSize);
+      if(board.colors[loc] == C_WALL)
+        continue;
+      int pos = NNPos::xyToPos(x,y,nnXLen);
 
       //Feature 0 - on board
       setRowBin(rowBin,pos,0, 1.0f, posStride, featureStride);
@@ -1385,6 +1399,8 @@ void NNInputs::fillRowV4(
     for(int y = 0; y<ySize; y++) {
       for(int x = 0; x<xSize; x++) {
         Loc loc = Location::getLoc(x,y,xSize);
+        if(board.colors[loc] == C_WALL)
+          continue;
         if(hist.superKoBanned[loc] && loc != board.ko_loc) {
           int pos = NNPos::locToPos(loc,xSize,nnXLen,nnYLen);
           setRowBin(rowBin,pos,6, 1.0f, posStride, featureStride);
@@ -1397,6 +1413,8 @@ void NNInputs::fillRowV4(
     for(int y = 0; y<ySize; y++) {
       for(int x = 0; x<xSize; x++) {
         Loc loc = Location::getLoc(x,y,xSize);
+        if(board.colors[loc] == C_WALL)
+          continue;
         int pos = NNPos::locToPos(loc,xSize,nnXLen,nnYLen);
         if(hist.superKoBanned[loc])
           setRowBin(rowBin,pos,6, 1.0f, posStride, featureStride);
@@ -1520,6 +1538,8 @@ void NNInputs::fillRowV4(
   for(int y = 0; y<ySize; y++) {
     for(int x = 0; x<xSize; x++) {
       Loc loc = Location::getLoc(x,y,xSize);
+      if(board.colors[loc] == C_WALL)
+        continue;
       int pos = NNPos::locToPos(loc,xSize,nnXLen,nnYLen);
       if(area[loc] == pla)
         setRowBin(rowBin,pos,18, 1.0f, posStride, featureStride);
@@ -1533,6 +1553,8 @@ void NNInputs::fillRowV4(
     for(int y = 0; y<ySize; y++) {
       for(int x = 0; x<xSize; x++) {
         Loc loc = Location::getLoc(x,y,xSize);
+        if(board.colors[loc] == C_WALL)
+          continue;
         int pos = NNPos::locToPos(loc,xSize,nnXLen,nnYLen);
         if(hist.secondEncoreStartColors[loc] == pla)
           setRowBin(rowBin,pos,20, 1.0f, posStride, featureStride);
@@ -1692,8 +1714,10 @@ void NNInputs::fillRowV5(
 
   for(int y = 0; y<ySize; y++) {
     for(int x = 0; x<xSize; x++) {
-      int pos = NNPos::xyToPos(x,y,nnXLen);
       Loc loc = Location::getLoc(x,y,xSize);
+      if(board.colors[loc] == C_WALL)
+        continue;
+      int pos = NNPos::xyToPos(x,y,nnXLen);
 
       //Feature 0 - on board
       setRowBin(rowBin,pos,0, 1.0f, posStride, featureStride);
@@ -1717,6 +1741,8 @@ void NNInputs::fillRowV5(
     for(int y = 0; y<ySize; y++) {
       for(int x = 0; x<xSize; x++) {
         Loc loc = Location::getLoc(x,y,xSize);
+        if(board.colors[loc] == C_WALL)
+          continue;
         if(hist.superKoBanned[loc] && loc != board.ko_loc) {
           int pos = NNPos::locToPos(loc,xSize,nnXLen,nnYLen);
           setRowBin(rowBin,pos,3, 1.0f, posStride, featureStride);
@@ -1729,6 +1755,8 @@ void NNInputs::fillRowV5(
     for(int y = 0; y<ySize; y++) {
       for(int x = 0; x<xSize; x++) {
         Loc loc = Location::getLoc(x,y,xSize);
+        if(board.colors[loc] == C_WALL)
+          continue;
         int pos = NNPos::locToPos(loc,xSize,nnXLen,nnYLen);
         if(hist.superKoBanned[loc])
           setRowBin(rowBin,pos,3, 1.0f, posStride, featureStride);
@@ -1804,6 +1832,8 @@ void NNInputs::fillRowV5(
     for(int y = 0; y<ySize; y++) {
       for(int x = 0; x<xSize; x++) {
         Loc loc = Location::getLoc(x,y,xSize);
+        if(board.colors[loc] == C_WALL)
+          continue;
         int pos = NNPos::locToPos(loc,xSize,nnXLen,nnYLen);
         if(hist.secondEncoreStartColors[loc] == pla)
           setRowBin(rowBin,pos,11, 1.0f, posStride, featureStride);
@@ -1894,8 +1924,10 @@ void NNInputs::fillRowV6(
 
   for(int y = 0; y<ySize; y++) {
     for(int x = 0; x<xSize; x++) {
-      int pos = NNPos::xyToPos(x,y,nnXLen);
       Loc loc = Location::getLoc(x,y,xSize);
+      if(board.colors[loc] == C_WALL)
+        continue;
+      int pos = NNPos::xyToPos(x,y,nnXLen);
 
       //Feature 0 - on board
       setRowBin(rowBin,pos,0, 1.0f, posStride, featureStride);
@@ -1927,6 +1959,8 @@ void NNInputs::fillRowV6(
     for(int y = 0; y<ySize; y++) {
       for(int x = 0; x<xSize; x++) {
         Loc loc = Location::getLoc(x,y,xSize);
+        if(board.colors[loc] == C_WALL)
+          continue;
         if(hist.superKoBanned[loc] && loc != board.ko_loc) {
           int pos = NNPos::locToPos(loc,xSize,nnXLen,nnYLen);
           setRowBin(rowBin,pos,6, 1.0f, posStride, featureStride);
@@ -1939,6 +1973,8 @@ void NNInputs::fillRowV6(
     for(int y = 0; y<ySize; y++) {
       for(int x = 0; x<xSize; x++) {
         Loc loc = Location::getLoc(x,y,xSize);
+        if(board.colors[loc] == C_WALL)
+          continue;
         int pos = NNPos::locToPos(loc,xSize,nnXLen,nnYLen);
         if(hist.superKoBanned[loc])
           setRowBin(rowBin,pos,6, 1.0f, posStride, featureStride);
@@ -2006,6 +2042,8 @@ void NNInputs::fillRowV6(
     for(int y = 0; y<ySize; y++) {
       for(int x = 0; x<xSize; x++) {
         Loc loc = Location::getLoc(x,y,xSize);
+        if(board.colors[loc] == C_WALL)
+          continue;
         int pos = NNPos::locToPos(loc,xSize,nnXLen,nnYLen);
         if(area[loc] == pla) {
           setRowBin(rowBin,pos,18, 1.0f, posStride, featureStride);
@@ -2163,6 +2201,8 @@ void NNInputs::fillRowV6(
     for(int y = 0; y<ySize; y++) {
       for(int x = 0; x<xSize; x++) {
         Loc loc = Location::getLoc(x,y,xSize);
+        if(board.colors[loc] == C_WALL)
+          continue;
         int pos = NNPos::locToPos(loc,xSize,nnXLen,nnYLen);
         if(hist.secondEncoreStartColors[loc] == pla)
           setRowBin(rowBin,pos,20, 1.0f, posStride, featureStride);
@@ -2331,8 +2371,10 @@ void NNInputs::fillRowV7(
 
   for(int y = 0; y<ySize; y++) {
     for(int x = 0; x<xSize; x++) {
-      int pos = NNPos::xyToPos(x,y,nnXLen);
       Loc loc = Location::getLoc(x,y,xSize);
+      if(board.colors[loc] == C_WALL)
+        continue;
+      int pos = NNPos::xyToPos(x,y,nnXLen);
 
       //Feature 0 - on board
       setRowBin(rowBin,pos,0, 1.0f, posStride, featureStride);
@@ -2601,6 +2643,8 @@ void NNInputs::fillRowV7(
     for(int y = 0; y<ySize; y++) {
       for(int x = 0; x<xSize; x++) {
         Loc loc = Location::getLoc(x,y,xSize);
+        if(board.colors[loc] == C_WALL)
+          continue;
         int pos = NNPos::locToPos(loc,xSize,nnXLen,nnYLen);
         if(hist.secondEncoreStartColors[loc] == pla)
           setRowBin(rowBin,pos,20, 1.0f, posStride, featureStride);
