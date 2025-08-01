@@ -308,6 +308,9 @@ double Search::getUtilityFromNN(const NNOutput& nnOutput) const {
 
 
 bool Search::isAllowedRootMove(Loc moveLoc) const {
+  if (!rootBoard.isOnBoard(moveLoc))
+      return false;
+
   assert(moveLoc == Board::PASS_LOC || rootBoard.isOnBoard(moveLoc));
 
   //A bad situation that can happen that unnecessarily prolongs training games is where one player
