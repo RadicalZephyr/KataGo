@@ -750,6 +750,19 @@ bool Board::setStonesFailIfNoLibs(std::vector<Move> placements) {
   return true;
 }
 
+bool Board::setWallFailIfOutOfBounds(Loc loc) {
+  if(loc < 0 || loc >= MAX_ARR_SIZE)
+    return false;
+
+  if(colors[loc] == C_WALL)
+    return true;
+  if(colors[loc] != C_EMPTY)
+    return false;
+
+  colors[loc] = C_WALL;
+  return true;
+}
+
 bool Board::setWallsFailIfNoLibs(std::vector<Loc> walls) {
     //First empty out all locations that we plan to set.
     //This guarantees avoiding any intermediate liberty issues.
@@ -760,7 +773,7 @@ bool Board::setWallsFailIfNoLibs(std::vector<Loc> walls) {
     }
     //Now set all the walls we wanted.
     for (const Loc& loc: walls) {
-        bool suc = setStoneFailIfNoLibs(loc, C_WALL);
+        bool suc = setWallFailIfOutOfBounds(loc);
         if(!suc)
             return false;
     }
