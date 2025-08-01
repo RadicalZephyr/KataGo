@@ -180,12 +180,12 @@ void Board::initHash()
   //afffected by the size of the board we compile with.
   for(int i = 0; i<MAX_ARR_SIZE; i++) {
     for(Color j = 0; j<4; j++) {
-      if(j == C_EMPTY || j == C_WALL)
+      if(j == C_EMPTY)
         ZOBRIST_BOARD_HASH[i][j] = Hash128();
       else
         ZOBRIST_BOARD_HASH[i][j] = nextHash();
 
-      if(j == C_EMPTY || j == C_WALL)
+      if(j == C_EMPTY)
         ZOBRIST_KO_MARK_HASH[i][j] = Hash128();
       else
         ZOBRIST_KO_MARK_HASH[i][j] = nextHash();
@@ -198,7 +198,7 @@ void Board::initHash()
   rand.init("Board::initHash() for ZOBRIST_SECOND_ENCORE_START hashes");
   for(int i = 0; i<MAX_ARR_SIZE; i++) {
     for(Color j = 0; j<4; j++) {
-      if(j == C_EMPTY || j == C_WALL)
+      if(j == C_EMPTY)
         ZOBRIST_SECOND_ENCORE_START_HASH[i][j] = Hash128();
       else
         ZOBRIST_SECOND_ENCORE_START_HASH[i][j] = nextHash();
@@ -760,6 +760,7 @@ bool Board::setWallFailIfOutOfBounds(Loc loc) {
     return false;
 
   colors[loc] = C_WALL;
+  pos_hash ^= ZOBRIST_BOARD_HASH[loc][C_WALL];
   return true;
 }
 
@@ -2351,28 +2352,34 @@ void Board::checkConsistency() const {
   for(Loc loc = 0; loc < MAX_ARR_SIZE; loc++) {
     int x = Location::getX(loc,x_size);
     int y = Location::getY(loc,x_size);
-    if(x < 0 || x >= x_size || y < 0 || y >= y_size) {
-      if(colors[loc] != C_WALL)
+    bool inBounds = x >= 0 && x < x_size && y >= 0 && y < y_size;
+    Color c = colors[loc];
+    if(!inBounds) {
+      if(c != C_WALL)
         throw StringError(errLabel + "Non-WALL value outside of board legal area");
+      continue;
     }
-    else {
-      if(colors[loc] == C_BLACK || colors[loc] == C_WHITE) {
-        if(!chainLocChecked[loc])
-          checkChainConsistency(loc);
-        // if(empty_list.contains(loc))
-        //   throw StringError(errLabel + "Empty list contains filled location");
 
-        tmp_pos_hash ^= ZOBRIST_BOARD_HASH[loc][colors[loc]];
-        tmp_pos_hash ^= ZOBRIST_BOARD_HASH[loc][C_EMPTY];
-      }
-      else if(colors[loc] == C_EMPTY) {
-        // if(!empty_list.contains(loc))
-        //   throw StringError(errLabel + "Empty list doesn't contain empty location");
-        emptyCount += 1;
-      }
-      else
-        throw StringError(errLabel + "Non-(black,white,empty) value within board legal area");
+    if(c == C_BLACK || c == C_WHITE) {
+      if(!chainLocChecked[loc])
+        checkChainConsistency(loc);
+      // if(empty_list.contains(loc))
+      //   throw StringError(errLabel + "Empty list contains filled location");
+      tmp_pos_hash ^= ZOBRIST_BOARD_HASH[loc][c];
+      tmp_pos_hash ^= ZOBRIST_BOARD_HASH[loc][C_EMPTY];
     }
+    else if(c == C_EMPTY) {
+      // if(!empty_list.contains(loc))
+      //   throw StringError(errLabel + "Empty list doesn't contain empty location");
+      emptyCount += 1;
+    }
+    else if(c == C_WALL) {
+      // Interior wall inside the legal board area
+      tmp_pos_hash ^= ZOBRIST_BOARD_HASH[loc][C_WALL];
+      tmp_pos_hash ^= ZOBRIST_BOARD_HASH[loc][C_EMPTY];
+    }
+    else
+      throw StringError(errLabel + "Non-(black,white,empty,wall) value within board legal area");
   }
 
   if(pos_hash != tmp_pos_hash)
