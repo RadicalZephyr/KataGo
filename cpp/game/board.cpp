@@ -2369,6 +2369,8 @@ void Board::checkConsistency() const {
         //   throw StringError(errLabel + "Empty list doesn't contain empty location");
         emptyCount += 1;
       }
+      else if(colors[loc] == C_WALL)
+      {}
       else
         throw StringError(errLabel + "Non-(black,white,empty) value within board legal area");
     }
