@@ -2352,32 +2352,34 @@ void Board::checkConsistency() const {
   for(Loc loc = 0; loc < MAX_ARR_SIZE; loc++) {
     int x = Location::getX(loc,x_size);
     int y = Location::getY(loc,x_size);
-    if(x < 0 || x >= x_size || y < 0 || y >= y_size) {
-      if(colors[loc] != C_WALL)
+    bool inBounds = x >= 0 && x < x_size && y >= 0 && y < y_size;
+    Color c = colors[loc];
+    if(!inBounds) {
+      if(c != C_WALL)
         throw StringError(errLabel + "Non-WALL value outside of board legal area");
+      continue;
     }
-    else {
-      if(colors[loc] == C_BLACK || colors[loc] == C_WHITE) {
-        if(!chainLocChecked[loc])
-          checkChainConsistency(loc);
-        // if(empty_list.contains(loc))
-        //   throw StringError(errLabel + "Empty list contains filled location");
-        tmp_pos_hash ^= ZOBRIST_BOARD_HASH[loc][colors[loc]];
-        tmp_pos_hash ^= ZOBRIST_BOARD_HASH[loc][C_EMPTY];
-      }
-      else if(colors[loc] == C_EMPTY) {
-        // if(!empty_list.contains(loc))
-        //   throw StringError(errLabel + "Empty list doesn't contain empty location");
-        emptyCount += 1;
-      }
-      else if(colors[loc] == C_WALL) {
-        //wall inside legal area
-        tmp_pos_hash ^= ZOBRIST_BOARD_HASH[loc][colors[loc]];
-        tmp_pos_hash ^= ZOBRIST_BOARD_HASH[loc][C_EMPTY];
-      }
-      else
-        throw StringError(errLabel + "Non-(black,white,empty,wall) value within board legal area");
+
+    if(c == C_BLACK || c == C_WHITE) {
+      if(!chainLocChecked[loc])
+        checkChainConsistency(loc);
+      // if(empty_list.contains(loc))
+      //   throw StringError(errLabel + "Empty list contains filled location");
+      tmp_pos_hash ^= ZOBRIST_BOARD_HASH[loc][c];
+      tmp_pos_hash ^= ZOBRIST_BOARD_HASH[loc][C_EMPTY];
     }
+    else if(c == C_EMPTY) {
+      // if(!empty_list.contains(loc))
+      //   throw StringError(errLabel + "Empty list doesn't contain empty location");
+      emptyCount += 1;
+    }
+    else if(c == C_WALL) {
+      // Interior wall inside the legal board area
+      tmp_pos_hash ^= ZOBRIST_BOARD_HASH[loc][C_WALL];
+      tmp_pos_hash ^= ZOBRIST_BOARD_HASH[loc][C_EMPTY];
+    }
+    else
+      throw StringError(errLabel + "Non-(black,white,empty,wall) value within board legal area");
   }
 
   if(pos_hash != tmp_pos_hash)
