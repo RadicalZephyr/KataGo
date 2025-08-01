@@ -180,12 +180,12 @@ void Board::initHash()
   //afffected by the size of the board we compile with.
   for(int i = 0; i<MAX_ARR_SIZE; i++) {
     for(Color j = 0; j<4; j++) {
-      if(j == C_EMPTY || j == C_WALL)
+      if(j == C_EMPTY)
         ZOBRIST_BOARD_HASH[i][j] = Hash128();
       else
         ZOBRIST_BOARD_HASH[i][j] = nextHash();
 
-      if(j == C_EMPTY || j == C_WALL)
+      if(j == C_EMPTY)
         ZOBRIST_KO_MARK_HASH[i][j] = Hash128();
       else
         ZOBRIST_KO_MARK_HASH[i][j] = nextHash();
@@ -751,15 +751,17 @@ bool Board::setStonesFailIfNoLibs(std::vector<Move> placements) {
 }
 
 bool Board::setWallFailIfOutOfBounds(Loc loc) {
-    if(loc < 0 || loc >= MAX_ARR_SIZE)
-        return false;
+  if(loc < 0 || loc >= MAX_ARR_SIZE)
+    return false;
 
-    if(colors[loc] == C_WALL)
-    {}
-    else if (colors[loc] == C_EMPTY) {
-        colors[loc] = C_WALL;
-    }
+  if(colors[loc] == C_WALL)
     return true;
+  if(colors[loc] != C_EMPTY)
+    return false;
+
+  colors[loc] = C_WALL;
+  pos_hash ^= ZOBRIST_BOARD_HASH[loc][C_WALL];
+  return true;
 }
 
 bool Board::setWallsFailIfNoLibs(std::vector<Loc> walls) {
@@ -2360,7 +2362,6 @@ void Board::checkConsistency() const {
           checkChainConsistency(loc);
         // if(empty_list.contains(loc))
         //   throw StringError(errLabel + "Empty list contains filled location");
-
         tmp_pos_hash ^= ZOBRIST_BOARD_HASH[loc][colors[loc]];
         tmp_pos_hash ^= ZOBRIST_BOARD_HASH[loc][C_EMPTY];
       }
@@ -2369,10 +2370,13 @@ void Board::checkConsistency() const {
         //   throw StringError(errLabel + "Empty list doesn't contain empty location");
         emptyCount += 1;
       }
-      else if(colors[loc] == C_WALL)
-      {}
+      else if(colors[loc] == C_WALL) {
+        //wall inside legal area
+        tmp_pos_hash ^= ZOBRIST_BOARD_HASH[loc][colors[loc]];
+        tmp_pos_hash ^= ZOBRIST_BOARD_HASH[loc][C_EMPTY];
+      }
       else
-        throw StringError(errLabel + "Non-(black,white,empty) value within board legal area");
+        throw StringError(errLabel + "Non-(black,white,empty,wall) value within board legal area");
     }
   }
 
@@ -2756,6 +2760,11 @@ Board Board::parseBoard(int xSize, int ySize, const string& s, char lineDelimite
       Loc loc = Location::getLoc(x,y,board.x_size);
       if(c == '.' || c == ' ' || c == '*' || c == ',' || c == '`')
         continue;
+      else if(c == '#') {
+        bool suc = board.setWallFailIfOutOfBounds(loc);
+        if(!suc)
+          throw StringError(string("Board::parseBoard - could not place wall at ") + Location::toString(loc,board));
+      }
       else if(c == 'o' || c == 'O') {
         bool suc = board.setStoneFailIfNoLibs(loc,P_WHITE);
         if(!suc)
