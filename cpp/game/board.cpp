@@ -198,7 +198,7 @@ void Board::initHash()
   rand.init("Board::initHash() for ZOBRIST_SECOND_ENCORE_START hashes");
   for(int i = 0; i<MAX_ARR_SIZE; i++) {
     for(Color j = 0; j<4; j++) {
-      if(j == C_EMPTY || j == C_WALL)
+      if(j == C_EMPTY)
         ZOBRIST_SECOND_ENCORE_START_HASH[i][j] = Hash128();
       else
         ZOBRIST_SECOND_ENCORE_START_HASH[i][j] = nextHash();
