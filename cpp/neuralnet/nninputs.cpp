@@ -690,7 +690,12 @@ Board SymmetryHelpers::getSymBoard(const Board& board, int symmetry) {
       if(transpose)
         std::swap(symX,symY);
       Loc symLoc = Location::getLoc(symX,symY,symBoard.x_size);
-      bool suc = symBoard.setStoneFailIfNoLibs(symLoc,board.colors[loc]);
+      Color color = board.colors[loc];
+      bool suc;
+      if (color == C_WALL)
+          suc = symBoard.setWallFailIfOutOfBounds(symLoc);
+      else
+          suc = symBoard.setStoneFailIfNoLibs(symLoc,color);
       assert(suc);
       (void)suc;
       if(loc == board.ko_loc)
