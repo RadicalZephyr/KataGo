@@ -603,6 +603,8 @@ int BoardHistory::countAreaScoreWhiteMinusBlack(const Board& board, Color area[B
   for(int y = 0; y<board.y_size; y++) {
     for(int x = 0; x<board.x_size; x++) {
       Loc loc = Location::getLoc(x,y,board.x_size);
+      if(board.colors[loc] == C_WALL)
+        continue;
       if(area[loc] == C_WHITE)
         score += 1;
       else if(area[loc] == C_BLACK)
@@ -640,6 +642,8 @@ int BoardHistory::countTerritoryAreaScoreWhiteMinusBlack(const Board& board, Col
   for(int y = 0; y<board.y_size; y++) {
     for(int x = 0; x<board.x_size; x++) {
       Loc loc = Location::getLoc(x,y,board.x_size);
+      if(board.colors[loc] == C_WALL)
+        continue;
       if(area[loc] == C_WHITE)
         score += 1;
       else if(area[loc] == C_BLACK)
@@ -724,6 +728,8 @@ void BoardHistory::endGameIfAllPassAlive(const Board& board) {
   for(int y = 0; y<board.y_size; y++) {
     for(int x = 0; x<board.x_size; x++) {
       Loc loc = Location::getLoc(x,y,board.x_size);
+      if(board.colors[loc] == C_WALL)
+        continue;
       if(area[loc] == C_WHITE)
         boardScore += 1;
       else if(area[loc] == C_BLACK)
