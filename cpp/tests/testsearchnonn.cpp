@@ -641,6 +641,8 @@ xx......x
     for(int y = 0; y < board.y_size; y++) {
       for(int x = 0; x < board.x_size; x++) {
         Loc loc = Location::getLoc(x,y,board.x_size);
+        if(!board.isOnBoard(loc))
+          continue;
         if(board.colors[loc] == C_BLACK) {
           avoidMoveUntilByLoc[loc] = 0;
           board.setStone(loc,C_EMPTY);
@@ -717,6 +719,8 @@ xx......x
     for(int y = 0; y < board.y_size; y++) {
       for(int x = 0; x < board.x_size; x++) {
         Loc loc = Location::getLoc(x,y,board.x_size);
+        if(!board.isOnBoard(loc))
+          continue;
         if(board.colors[loc] == C_BLACK) {
           avoidMoveUntilByLoc[loc] = 0;
           board.setStone(loc,C_EMPTY);
@@ -793,6 +797,8 @@ xx......x
     for(int y = 0; y < board.y_size; y++) {
       for(int x = 0; x < board.x_size; x++) {
         Loc loc = Location::getLoc(x,y,board.x_size);
+        if(!board.isOnBoard(loc))
+          continue;
         if(board.colors[loc] == C_BLACK) {
           avoidMoveUntilByLoc[loc] = 0;
           board.setStone(loc,C_EMPTY);
@@ -1704,6 +1710,8 @@ oo..o..oo
       for(int y = 0; y < board.y_size; y++) {
         for(int x = 0; x < board.x_size; x++) {
           Loc loc = Location::getLoc(x,y,board.x_size);
+          if(!board.isOnBoard(loc))
+            continue;
           if(x == 0 || x == 1) {
             avoidMoveUntilByLoc[loc] = 0;
           }
@@ -1775,6 +1783,8 @@ oo..o..oo
       for(int y = 0; y < board.y_size; y++) {
         for(int x = 0; x < board.x_size; x++) {
           Loc loc = Location::getLoc(x,y,board.x_size);
+          if(!board.isOnBoard(loc))
+            continue;
           avoidMoveUntilByLoc[loc] = 3;
         }
       }
@@ -1821,6 +1831,8 @@ oo..o..oo
       for(int y = 0; y < board.y_size; y++) {
         for(int x = 0; x < board.x_size; x++) {
           Loc loc = Location::getLoc(x,y,board.x_size);
+          if(!board.isOnBoard(loc))
+            continue;
           avoidMoveUntilByLoc[loc] = 10;
         }
       }

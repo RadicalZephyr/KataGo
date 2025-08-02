@@ -1936,6 +1936,9 @@ std::vector<double> Search::getAverageTreeOwnership(
 
   for(int y = 0; y < board.y_size; y++) {
     for(int x = 0; x < board.x_size; x++) {
+      Loc loc = Location::getLoc(x,y,board.x_size);
+      if(!board.isOnBoard(loc))
+        continue;
       int pos = NNPos::xyToPos(x, y, nnXLen);
       Loc symLoc = SymmetryHelpers::getSymLoc(x, y, board, symmetry);
       int symPos = Location::getY(symLoc, board.x_size) * board.x_size + Location::getX(symLoc, board.x_size);
@@ -1968,6 +1971,9 @@ std::pair<std::vector<double>,std::vector<double>> Search::getAverageAndStandard
 
   for(int y = 0; y < board.y_size; y++) {
     for(int x = 0; x < board.x_size; x++) {
+      Loc loc = Location::getLoc(x,y,board.x_size);
+      if(!board.isOnBoard(loc))
+        continue;
       int pos = NNPos::xyToPos(x, y, nnXLen);
       Loc symLoc = SymmetryHelpers::getSymLoc(x, y, board, symmetry);
       int symPos = Location::getY(symLoc, board.x_size) * board.x_size + Location::getX(symLoc, board.x_size);
@@ -2170,6 +2176,11 @@ bool Search::getAnalysisJson(
       json policy = json::array();
       for(int y = 0; y < board.y_size; y++) {
         for(int x = 0; x < board.x_size; x++) {
+          Loc loc = Location::getLoc(x,y,board.x_size);
+          if(!board.isOnBoard(loc)) {
+            policy.push_back(0.0);
+            continue;
+          }
           int pos = NNPos::xyToPos(x, y, nnXLen);
           policy.push_back(Global::roundDynamic(policyProbs[pos],OUTPUT_PRECISION));
         }
@@ -2185,6 +2196,11 @@ bool Search::getAnalysisJson(
       json policy = json::array();
       for(int y = 0; y < board.y_size; y++) {
         for(int x = 0; x < board.x_size; x++) {
+          Loc loc = Location::getLoc(x,y,board.x_size);
+          if(!board.isOnBoard(loc)) {
+            policy.push_back(0.0);
+            continue;
+          }
           int pos = NNPos::xyToPos(x, y, nnXLen);
           policy.push_back(Global::roundDynamic(policyProbs[pos],OUTPUT_PRECISION));
         }
