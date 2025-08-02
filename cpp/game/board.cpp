@@ -640,7 +640,7 @@ bool Board::isEmpty() const {
   for(int y = 0; y < y_size; y++) {
     for(int x = 0; x < x_size; x++) {
       Loc loc = Location::getLoc(x,y,x_size);
-      if(colors[loc] != C_EMPTY)
+      if(!(colors[loc] == C_EMPTY || colors[loc] == C_WALL))
         return false;
     }
   }
