@@ -293,6 +293,33 @@ BC50 BC50 x 52 y 20
     expect(name,out,expected);
   }
 
+  //============================================================================
+  {
+    const char* name = "Wall IO";
+    Board board = Board::parseBoard(5,5,R"%%(
+X.O..
+..#..
+.....
+.....
+.....
+)%%");
+    out << Board::toStringSimple(board,'\n');
+    Board board2 = Board::ofJson(Board::toJson(board));
+    out << Board::toStringSimple(board2,'\n');
+    string expected = R"%%(
+X.O..
+..#..
+.....
+.....
+.....
+X.O..
+..#..
+.....
+.....
+.....
+)%%";
+    expect(name,out,expected);
+  }
 
   //============================================================================
   {

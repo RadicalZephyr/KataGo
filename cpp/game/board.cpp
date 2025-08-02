@@ -2728,7 +2728,11 @@ string Board::toStringSimple(const Board& board, char lineDelimiter) {
   for(int y = 0; y < board.y_size; y++) {
     for(int x = 0; x < board.x_size; x++) {
       Loc loc = Location::getLoc(x,y,board.x_size);
-      s += PlayerIO::colorToChar(board.colors[loc]);
+      Color c = board.colors[loc];
+      if(c == C_WALL)
+        s += '#';
+      else
+        s += PlayerIO::colorToChar(c);
     }
     s += lineDelimiter;
   }
