@@ -1847,8 +1847,6 @@ void Board::calculateArea(
     for(int y = 0; y < y_size; y++) {
       for(int x = 0; x < x_size; x++) {
         Loc loc = Location::getLoc(x,y,x_size);
-        if(colors[loc] == C_WALL)
-          continue;
         if(result[loc] == C_EMPTY)
           result[loc] = colors[loc];
       }
@@ -1874,8 +1872,6 @@ void Board::calculateIndependentLifeArea(
   for(int y = 0; y < y_size; y++) {
     for(int x = 0; x < x_size; x++) {
       Loc loc = Location::getLoc(x,y,x_size);
-      if(colors[loc] == C_WALL)
-        continue;
       if(basicArea[loc] == C_EMPTY)
         basicArea[loc] = colors[loc];
     }
@@ -1887,8 +1883,6 @@ void Board::calculateIndependentLifeArea(
     for(int y = 0; y < y_size; y++) {
       for(int x = 0; x < x_size; x++) {
         Loc loc = Location::getLoc(x,y,x_size);
-        if(colors[loc] == C_WALL)
-          continue;
         if(basicArea[loc] != C_EMPTY && basicArea[loc] != colors[loc])
           result[loc] = basicArea[loc];
       }
@@ -1898,8 +1892,6 @@ void Board::calculateIndependentLifeArea(
     for(int y = 0; y < y_size; y++) {
       for(int x = 0; x < x_size; x++) {
         Loc loc = Location::getLoc(x,y,x_size);
-        if(colors[loc] == C_WALL)
-          continue;
         if(basicArea[loc] != C_EMPTY && basicArea[loc] == colors[loc])
           result[loc] = basicArea[loc];
       }
