@@ -726,7 +726,10 @@ void SymmetryHelpers::markDuplicateMoveLocs(
     return;
   for(int y = 0; y < board.y_size; y++) {
     for(int x = 0; x < board.x_size; x++) {
-      if(hist.superKoBanned[Location::getLoc(x, y, board.x_size)])
+      Loc loc = Location::getLoc(x, y, board.x_size);
+      if(board.colors[loc] == C_WALL)
+        return;
+      if(hist.superKoBanned[loc])
         return;
     }
   }
