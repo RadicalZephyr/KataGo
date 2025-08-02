@@ -764,7 +764,7 @@ bool Board::setWallFailIfOutOfBounds(Loc loc) {
   return true;
 }
 
-bool Board::setWallsFailIfNoLibs(std::vector<Loc> walls) {
+bool Board::setWallsFailIfNoLibs(const std::vector<Loc>& walls) {
     //First empty out all locations that we plan to set.
     //This guarantees avoiding any intermediate liberty issues.
     for (const Loc& loc: walls) {

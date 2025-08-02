@@ -233,11 +233,11 @@ struct Board
   //Also returns false if any location is specified more than once.
   bool setStonesFailIfNoLibs(std::vector<Move> placements);
 
-    //Set a single wall at location
-    bool setWallFailIfOutOfBounds(Loc loc);
+  //Set a single wall at location
+  bool setWallFailIfOutOfBounds(Loc loc);
 
-    //Set arbitrary wall locations
-    bool setWallsFailIfNoLibs(std::vector<Loc> walls);
+  //Set arbitrary wall locations
+  bool setWallsFailIfNoLibs(const std::vector<Loc>& walls);
 
   //Attempts to play the specified move. Returns true if successful, returns false if the move was illegal.
   bool playMove(Loc loc, Player pla, bool isMultiStoneSuicideLegal);
