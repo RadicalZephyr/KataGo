@@ -1,4 +1,3 @@
-
 #include <sstream>
 #include "../core/global.h"
 #include "../core/bsearch.h"
@@ -76,6 +75,7 @@ int MainCmds::runoutputtests(const vector<string>& args) {
   ScoreValue::initTables();
 
   Tests::runNNInputsV3V4Tests();
+  Tests::runWallTests();
   Tests::runNNLessSearchTests();
   Tests::runTrainingWriteTests();
   Tests::runTimeControlsTests();
@@ -107,6 +107,13 @@ int MainCmds::runsearchtests(const vector<string>& args) {
     Global::stringToInt(args[4]),
     Global::stringToBool(args[5])
   );
+  Tests::runWallSearchTests(
+    args[1],
+    Global::stringToBool(args[2]),
+    Global::stringToBool(args[3]),
+    Global::stringToInt(args[4]),
+    Global::stringToBool(args[5])
+    );
 
   ScoreValue::freeTables();
 
@@ -755,4 +762,3 @@ int MainCmds::runconfigtests(const vector<string>& args) {
   Tests::runParseAllConfigsTest();
   return 0;
 }
-

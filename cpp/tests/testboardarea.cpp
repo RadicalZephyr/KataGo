@@ -152,6 +152,23 @@ XXXX.OOOO
     expect(name,out,expected);
   }
 
+  //=======================================================================
+  {
+    const char* name = "Walls treated as empty";
+    Color result[Board::MAX_ARR_SIZE];
+    Board board = Board::parseBoard(5,5,R"%%(
+.....
+..#..
+.....
+.....
+.....
+)%%");
+    board.calculateArea(result,true,true,true,false);
+    Loc center = Location::getLoc(2,2,board.x_size);
+    out << PlayerIO::colorToChar(result[center]) << endl;
+    expect(name,out,".");
+  }
+
   //============================================================================
   {
     const char* name = "Area 2";
